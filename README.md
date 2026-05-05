@@ -2,14 +2,30 @@
 
 ## 🚀 Быстрый запуск:
 
-1. `cp .env.example .env`
-2. `docker compose up -d --build`
-3. Подожди 30 секунд
-4. Открой http://localhost:8000
+# 1. Скачать проект
+git clone https://github.com/artur-9/TODO_list.git
+cd TODO_list
 
-## 🔧 Если не работает:
-- Очисти кэш браузера (Ctrl+Shift+Delete)
-- Или открой в режиме инкогнито
+# 2. Создать файл настроек
+cp .env.example .env
+
+# 3. Запустить контейнеры
+docker compose up -d --build
+
+# 4. ⏰ ПОДОЖДАТЬ 1-2 МИНУТЫ!
+
+# 5. Установить зависимости (ВАЖНО!)
+docker compose exec app bash
+composer install
+php artisan key:generate
+php artisan migrate
+exit
+
+# 6. Очистить кэш
+docker compose exec app php artisan optimize:clear
+
+# 7. Открыть сайт (в режиме инкогнито!)
+# http://localhost:8000
 
 ## 🗄️ База данных:
 - Хост: `db`
