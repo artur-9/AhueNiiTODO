@@ -9,8 +9,19 @@ cd TODO_list
 # 2. Создать файл настроек
 cp .env.example .env
 
+#3.Замените эти строки:
+DB_HOST=db                    
+DB_PORT=3306
+DB_DATABASE=notes_todo_       
+DB_USERNAME=laravel           
+DB_PASSWORD=laravelpassword
+
+#4 Запустите базу данных:
+docker compose up -d db
+sleep 15  # ждем пока MySQL запустится
+
 # 3. Запустить контейнеры
-docker compose up -d --build
+docker compose up -d 
 
 # 4. ⏰ ПОДОЖДАТЬ 1-2 МИНУТЫ!
 
