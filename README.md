@@ -16,46 +16,33 @@ DB_DATABASE=notes_todo_
 DB_USERNAME=laravel           
 DB_PASSWORD=laravelpassword
 
-# 4 Запустите базу данных:
-docker compose up -d db
-sleep 15  # ждем пока MySQL запустится
+# 4 Создай необходимые папки (Windows PowerShell):
+New-Item -ItemType Directory -Force -Path ".\storage\framework\views"
+New-Item -ItemType Directory -Force -Path ".\storage\framework\cache"
+New-Item -ItemType Directory -Force -Path ".\storage\framework\sessions"
+New-Item -ItemType Directory -Force -Path ".\storage\logs"
+New-Item -ItemType Directory -Force -Path ".\bootstrap\cache"
 
 # 5. Запустить контейнеры
 docker compose up -d 
 
-# 6.Проверяем содержимое контейнера:
-docker compose exec app ls -la /var/www/
+# 6.Установи зависимости и сгенерируй ключ:
+docker-compose exec app composer install
+docker-compose exec app php artisan key:generate
 
-# 7.Устанавливаем PHP зависимости (Composer):
-docker compose run --rm app composer install
+# 7.Установи npm зависимости и собери ассеты:
+docker-compose exec app npm install
+docker-compose exec app npm run build
 
-# 8. Устанавливаем JavaScript зависимости (npm):
-docker compose run --rm app npm install
+# 8. Запусти миграции:
+docker-compose exec app php artisan migrate
 
-# 9.Собираем frontend (CSS/JS):
-docker compose run --rm app npm run build
 
-# 10.Исправляем права доступа:
-docker compose run --rm app chown -R www-data storage bootstrap/cache
-docker compose run --rm app chmod -R 775 storage bootstrap/cache
-
-# 11.Исправляем права доступа:
-docker compose run --rm app chown -R www-data storage bootstrap/cache
-docker compose run --rm app chmod -R 775 storage bootstrap/cache
-
-# 12.Генерируем APP_KEY:
-docker compose run --rm app php artisan key:generate
-
-# 13.Запускаем миграции БД:
-docker compose run --rm app php artisan migrate
-
-# 14.Проверяем что контейнеры работают:
-docker compose ps
 
 # 15. Открыть сайт (в режиме инкогнито!)
 # http://localhost:8000
 
 ## 🗄️ База данных:
 - Хост: `db`
-- Порт: `3307` (для внешнего доступа)
+- Порт: `3306` (для внешнего доступа)
 - Данные загружаются автоматически из `docker/mysql/init/`
