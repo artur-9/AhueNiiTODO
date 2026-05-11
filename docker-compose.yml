@@ -36,7 +36,7 @@
       MYSQL_USER: laravel
       MYSQL_PASSWORD: laravelpassword
     ports:
-      - "3307:3306"
+      - "3306:3306"
     volumes:
       - ./docker/mysql/init:/docker-entrypoint-initdb.d
       - db_data:/var/lib/mysql
